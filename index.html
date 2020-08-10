@@ -1,0 +1,56 @@
+<head>
+    <title>Friend Fleet List</title>
+    <script src="id_tl.js"></script>
+    <script src="summer20/e1t_strong.js"></script>
+    <script src="summer20/e4z3_strong.js"></script>
+    <script src="summer20/e6z_strong.js"></script>
+    <script src="summer20/e7y_strong.js"></script>
+    <script src="summer20/e7z_strong.js"></script>
+    <script src="summer20/fflist.js"></script>
+    <style type="text/css">
+        div {
+            display:inline;
+        }
+        textarea {
+            width: 700px;
+            height: 200px;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+    </style>
+    <script src="script.js"></script>
+</head>
+
+<body>
+    <input type="radio" id="en" name="lang" value="en" onchange="changeType(this)" checked>
+    <label for="en">EN</label>
+    <input type="radio" id="jp" name="lang" value="jp", onchange="changeType(this)">
+    <label for="jp">日本</label>
+    <br>
+    <label for="map">Map:</label>
+    <select id="map" name="map" onchange="update()">
+        <option value="E1T">E1T</option>
+        <option value="E4Z3">E4Z3</option>
+        <option value="E6Z">E6Z</option>
+        <option value="E7Y">E7Y</option>
+        <option value="E7Z" selected>E7Z</option>
+    </select>
+    <br>
+    Ships in Fleet / 艦隊に存在:
+    <br>
+    <textarea id="ships" onchange="update()">Fletcher, Johnston</textarea>
+    <br>
+    <table style="width:60%" id="table">
+        <tr>
+            <th>First Ship</th>
+            <th>Second Ship</th>
+            <th>Third Ship</th>
+            <th>Fourth Ship</th>
+            <th>Fifth Ship</th>
+            <th>Sixth Ship</th>
+            <th>Appearance Rate</th>
+        </tr>
+    <script>
+    update()</script>
+</body>
