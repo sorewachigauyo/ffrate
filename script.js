@@ -57,8 +57,8 @@ function update() {
     const nameToSearch = ships.map(name => new RegExp(name, 'iu'))
     const shipsLeft = nameList.filter(name => nameToSearch.some(test => test.test(name)));
     let needList = shipsLeft.map(name => getBaseId(Number(nameToId[name]))).filter(onlyUnique);
-    const shipsToFilter = filterList[mapname].filter(sid => !needList.includes(sid));
     if (ships.length == 1 && ships[0] == "") needList = [];
+    const shipsToFilter = filterList[mapname].filter(sid => !needList.includes(sid));
     const data = {};
     let total = 0;
     for (let i = 0; i < map.length; i++) {
