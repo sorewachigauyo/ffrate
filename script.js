@@ -28,6 +28,20 @@ function changeType(clicked) {
     update()
 }
 
+function getBaseId(mid) {
+    var ship = SHIPDATA[mid];
+    while(ship) {
+        if (!ship.prev) break;
+        mid = ship.prev;
+        ship = SHIPDATA[ship.prev];
+    }
+    return mid;
+}
+
+function onlyUnique(value, index, self) { 
+    return self.indexOf(value) === index;
+}
+
 function update() {
     let nameToId = {};
     for (let id in id_tl.ships) {
@@ -42,21 +56,20 @@ function update() {
 
     const nameToSearch = ships.map(name => new RegExp(name, 'iu'))
     const shipsLeft = nameList.filter(name => nameToSearch.some(test => test.test(name)));
-    const needList = shipsLeft.map(name => Number(nameToId[name]));
+    let needList = shipsLeft.map(name => getBaseId(Number(nameToId[name]))).filter(onlyUnique);
     const shipsToFilter = filterList[mapname].filter(sid => !needList.includes(sid));
-
+    if (ships.length == 1 && ships[0] == "") needList = [];
     const data = {};
     let total = 0;
     for (let i = 0; i < map.length; i++) {
         const entry = map[i];
-        if ((entry.player.some(shipid => needList.includes(shipid)) || needList.length == 0) && !entry.player.some(shipid => shipsToFilter.includes(shipid))) {
+        if ((needList.length == 0 || needList.every(shipid => entry.player.includes(shipid))) && !entry.player.some(shipid => shipsToFilter.includes(shipid))) {
             const ff = JSON.stringify(entry.ff);
             if (!data[ff]) data[ff] = 0;
             data[ff]++;
             total++;
         }
     }
-
 
     var table = document.getElementById("table");
     while (table.rows.length > 1) {
@@ -79,6 +92,6 @@ function update() {
             cell.innerHTML = ship == -1 ? "None" : id_tl.ships[ship][lang];
         }
         var cell = row.insertCell(6)
-        cell.innerHTML = `${Math.floor(entry.count / total * 1000) / 10}%`
+        cell.innerHTML = `${entry.count}/${total}, ${Math.floor(entry.count / total * 1000) / 10}%`;
     }
 };
