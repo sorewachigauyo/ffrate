@@ -63,7 +63,7 @@ function update() {
     let total = 0;
     for (let i = 0; i < map.length; i++) {
         const entry = map[i];
-        if ((needList.length == 0 || needList.every(shipid => entry.player.includes(shipid))) && !entry.player.some(shipid => shipsToFilter.includes(shipid))) {
+        if ((needList.length == 0 || needList.some(shipid => entry.player.includes(shipid))) && !entry.player.some(shipid => shipsToFilter.includes(shipid))) {
             const ff = JSON.stringify(entry.ff);
             if (!data[ff]) data[ff] = 0;
             data[ff]++;
