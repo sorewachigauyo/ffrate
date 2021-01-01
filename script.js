@@ -54,16 +54,18 @@ function update() {
     const map = mapList[mapname];
     var ships = document.getElementById("ships").value.split(/[ ,]+/);;
 
-    const nameToSearch = ships.map(name => new RegExp(name, 'iu'))
-    const shipsLeft = nameList.filter(name => nameToSearch.some(test => test.test(name)));
-    let needList = shipsLeft.map(name => getBaseId(Number(nameToId[name]))).filter(onlyUnique);
-    if (ships.length == 1 && ships[0] == "") needList = [];
-    const shipsToFilter = filterList[mapname].filter(sid => !needList.includes(sid));
+    const namesToSearch = ships.map(name => new RegExp(name, 'iu'));
+    const shipsMatchingName = nameList.filter(name => namesToSearch.some(test => test.test(name)));
+    let shipsToInclude = shipsMatchingName.map(name => getBaseId(Number(nameToId[name]))).filter(onlyUnique);
+    if (ships.length == 1 && ships[0] == "") shipsToInclude = [];
+    const filteredFFArrays = filterList[mapname].filter(ffArray => ffArray.every(ffship => !shipsToInclude.includes(ffship)));
+    const shipsToFilter = [].concat.apply([], filteredFFArrays).filter(onlyUnique);
     const data = {};
     let total = 0;
     for (let i = 0; i < map.length; i++) {
         const entry = map[i];
-        if ((needList.length == 0 || needList.every(shipid => entry.player.includes(shipid))) && !entry.player.some(shipid => shipsToFilter.includes(shipid))) {
+        if ((shipsToInclude.length == 0 || shipsToInclude.every(shipid => entry.player.includes(shipid))) && !entry.player.some(shipid => shipsToFilter.includes(shipid))
+    ) {
             const ff = JSON.stringify(entry.ff);
             if (!data[ff]) data[ff] = 0;
             data[ff]++;
