@@ -2,12 +2,12 @@
     <title>Friend Fleet List</title>
     <script src="id_tl.js"></script>
     <script src="kcSHIPDATA.js"></script>
-    <script src="summer20/e1t_strong.js"></script>
-    <script src="summer20/e4z3_strong.js"></script>
-    <script src="summer20/e6z_strong.js"></script>
-    <script src="summer20/e7y_strong.js"></script>
-    <script src="summer20/e7z_strong.js"></script>
-    <script src="summer20/fflist.js"></script>
+    <script src="fall20/E1J_strong.js"></script>
+    <script src="fall20/E2Q_strong.js"></script>
+    <script src="fall20/E3Z_strong.js"></script>
+    <script src="fall20/E4W_strong.js"></script>
+    <script src="fall20/E4Z_strong.js"></script>
+    <script src="fall20/fflist.js"></script>
     <style type="text/css">
         div {
             display:inline;
@@ -31,16 +31,20 @@
     <br>
     <label for="map">Map:</label>
     <select id="map" name="map" onchange="update()">
-        <option value="E1T">E1T</option>
-        <option value="E4Z3">E4Z3</option>
-        <option value="E6Z">E6Z</option>
-        <option value="E7Y">E7Y</option>
-        <option value="E7Z" selected>E7Z</option>
+        <option value="E1J">E1J</option>
+        <option value="E2Q">E2Q</option>
+        <option value="E3Z">E3Z</option>
+        <option value="E4W">E4W</option>
+        <option value="E4Z" selected>E4Z</option>
     </select>
+    <br>
+    <br>
+    Results shown below include all ships in player fleet and filter out other friendly fleet blocking
+    <br>
     <br>
     Ships in Fleet / 艦隊に存在:
     <br>
-    <textarea id="ships" onchange="update()">Fletcher, Johnston</textarea>
+    <textarea id="ships" onchange="update()">Washington</textarea>
     <br>
     <table style="width:60%" id="table">
         <tr>

@@ -1,16 +1,16 @@
 const mapList = {
-    "E1T": E1T,
-    "E4Z3": E4Z3,
-    "E6Z": E6Z,
-    "E7Y": E7Y,
-    "E7Z": E7Z
+    "E1J": E1J,
+    "E2Q": E2Q,
+    "E3Z": E3Z,
+    "E4W": E4W,
+    "E4Z": E4Z
 };
 const filterList = {
-    "E1T": e1tlist,
-    "E4Z3": e4z3list,
-    "E6Z": e6zlist,
-    "E7Y": e7ylist,
-    "E7Z": e7zlist
+    "E1J": E1Jlist,
+    "E2Q": E2Qlist,
+    "E3Z": E3Zlist,
+    "E4W": E4Wlist,
+    "E4Z": E4Zlist
 };
 
 var lang = "en";
@@ -63,7 +63,7 @@ function update() {
     let total = 0;
     for (let i = 0; i < map.length; i++) {
         const entry = map[i];
-        if ((needList.length == 0 || needList.some(shipid => entry.player.includes(shipid))) && !entry.player.some(shipid => shipsToFilter.includes(shipid))) {
+        if ((needList.length == 0 || needList.every(shipid => entry.player.includes(shipid))) && !entry.player.some(shipid => shipsToFilter.includes(shipid))) {
             const ff = JSON.stringify(entry.ff);
             if (!data[ff]) data[ff] = 0;
             data[ff]++;
