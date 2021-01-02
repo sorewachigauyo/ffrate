@@ -91,7 +91,13 @@ function update() {
         for (let k = 0; k < 6; k++) {
             var cell = row.insertCell(k);
             var ship = entry.ff[k];
-            cell.innerHTML = ship == -1 ? "None" : id_tl.ships[ship][lang];
+            var img = document.createElement('img');
+            if (ship > 0) {
+                img.src = `icons/${SHIPDATA[ship].image}`;
+            } else {
+                img.src = "icons/Kblank.png"
+            }
+            cell.appendChild(img);
         }
         var cell = row.insertCell(6)
         cell.innerHTML = `${entry.count}/${total}, ${Math.floor(entry.count / total * 1000) / 10}%`;
