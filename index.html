@@ -17,7 +17,7 @@
         }
         textarea {
             width: 700px;
-            height: 200px;
+            height: 50px;
         }
         table, th, td {
             border: 1px solid black;
@@ -40,14 +40,14 @@
         <option value="E5V">E5V</option>
         <option value="E5Z" selected>E5Z</option>
     </select>
-    <br>
-    <br>
-    Results shown below include all ships in player fleet and filter out other friendly fleet blocking
+
+    <h3>How this tool works</h3>
+    We filter out fleets containing all of the ships you listed below (and do not block other friendly fleets).<br>Then, we show the probability of encountering an eligible friendly fleet.
     <br>
     <br>
     Ships in Fleet / 艦隊に存在:
     <br>
-    <textarea id="ships" onchange="update()">Washington</textarea>
+    <textarea id="ships" onchange="update()">Yukikaze</textarea>
     <br>
     <br>
     Friend Fleets

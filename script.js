@@ -76,14 +76,15 @@ function update() {
     const namesToSearch = shipNamesToFilter.map(name => new RegExp(name, 'iu'));
     const shipsMatchingName = nameList.filter(name => namesToSearch.some(test => test.test(name)));
     let shipsToInclude = shipsMatchingName.map(name => getBaseId(Number(nameToId[name]))).filter(onlyUnique);
-    if (ships.length == 1 && ships[0] == "") shipsToInclude = [];
+    if (shipNamesToFilter.length == 1 && shipNamesToFilter[0] == "") shipsToInclude = [];
 
     const select = document.getElementById("map");
     const mtitle = select.options[select.selectedIndex].value;
     const mapdata = raw[mtitle]
 
     // FF that do not have target ship
-    const filteredFFArrays = mapdata.ff.filter(ffArray => ffArray.every(ffship => !shipsToInclude.includes(getBaseId(ffship))));
+    let filteredFFArrays = mapdata.ff.filter(ffArray => ffArray.every(ffship => !shipsToInclude.includes(getBaseId(ffship))));
+    if (shipsToInclude.length == 0) { filteredFFArrays = mapdata.ff; }
     // For fair comparison, player fleet should not block any other FF
     const shipsToFilter = [].concat.apply([], filteredFFArrays).filter(onlyUnique);
 
