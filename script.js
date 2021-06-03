@@ -3,17 +3,10 @@ var lang = "en";
 const root = "https://raw.githubusercontent.com/sorewachigauyo/ffrate/master/"
 
 let id_tl = {};
-let nameToId = {};
-let nameList = [];
 let tlLoaded = false;
 let num = 0;
 $.getJSON(root + "data/idTL.json" ,null, (data, status, xhr) => {
     id_tl = data;
-    for (let id in id_tl.ships) {
-        const shipname = id_tl.ships[id][lang];
-        nameToId[shipname] = id;
-    }
-    nameList = Object.keys(nameToId);
     tlLoaded = true;
 });
 
@@ -72,12 +65,18 @@ function update() {
     if (Object.keys(id_tl).length == 0) {
         return;
     }
+    let nameToId = {};
+    let nameList = [];
+    for (let id in id_tl.ships) {
+        const shipname = id_tl.ships[id][lang];
+        nameToId[shipname] = id;
+    }
+    nameList = Object.keys(nameToId);
     const shipNamesToFilter = document.getElementById("ships").value.split(/[ ,]+/);;
     const namesToSearch = shipNamesToFilter.map(name => new RegExp(name, 'iu'));
     const shipsMatchingName = nameList.filter(name => namesToSearch.some(test => test.test(name)));
     let shipsToInclude = shipsMatchingName.map(name => getBaseId(Number(nameToId[name]))).filter(onlyUnique);
     if (shipNamesToFilter.length == 1 && shipNamesToFilter[0] == "") shipsToInclude = [];
-
     const select = document.getElementById("map");
     const mtitle = select.options[select.selectedIndex].value;
     const mapdata = raw[mtitle]
