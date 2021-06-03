@@ -1,20 +1,46 @@
-const mapList = {
-    "E1J": E1J,
-    "E2Q": E2Q,
-    "E3Z": E3Z,
-    "E4W": E4W,
-    "E4Z": E4Z
-};
-const filterList = {
-    "E1J": E1Jlist,
-    "E2Q": E2Qlist,
-    "E3Z": E3Zlist,
-    "E4W": E4Wlist,
-    "E4Z": E4Zlist
-};
-
+const event_name = "spring21"
 var lang = "en";
+const root = "https://raw.githubusercontent.com/sorewachigauyo/ffrate/master/"
 
+let id_tl = {};
+let nameToId = {};
+let nameList = [];
+let tlLoaded = false;
+let num = 0;
+$.getJSON(root + "data/idTL.json" ,null, (data, status, xhr) => {
+    id_tl = data;
+    for (let id in id_tl.ships) {
+        const shipname = id_tl.ships[id][lang];
+        nameToId[shipname] = id;
+    }
+    nameList = Object.keys(nameToId);
+    tlLoaded = true;
+});
+
+const raw = {
+    "E1Q": null,
+    "E1V": null,
+    "E4Z": null,
+    "E5V": null,
+    "E5Z": null
+}
+for (let key in raw) {
+    $.getJSON(root + `${event_name}/${key}.json`, null, (data, status, xhr) => {
+        raw[key] = {
+            ff: null,
+            instances: data
+        };
+        const obj = {}
+        for (let array of data) {
+            const enemy = array[1];
+            obj[JSON.stringify(enemy)] = null;
+        }
+        raw[key].ff = Object.keys(obj).map(a => JSON.parse(a));
+    });
+}
+
+
+const filterer = a => a > 0
 function sortArray(a, b) {
     if (b.count > a.count) return 1;
     else return -1;
@@ -43,35 +69,34 @@ function onlyUnique(value, index, self) {
 }
 
 function update() {
-    let nameToId = {};
-    for (let id in id_tl.ships) {
-        const shipname = id_tl.ships[id][lang];
-        nameToId[shipname] = id;
+    if (Object.keys(id_tl).length == 0) {
+        return;
     }
-    const nameList = Object.keys(nameToId);
-    var select = document.getElementById("map");
-    const mapname = select.options[select.selectedIndex].value
-    const map = mapList[mapname];
-    var ships = document.getElementById("ships").value.split(/[ ,]+/);;
-
-    const namesToSearch = ships.map(name => new RegExp(name, 'iu'));
+    const shipNamesToFilter = document.getElementById("ships").value.split(/[ ,]+/);;
+    const namesToSearch = shipNamesToFilter.map(name => new RegExp(name, 'iu'));
     const shipsMatchingName = nameList.filter(name => namesToSearch.some(test => test.test(name)));
     let shipsToInclude = shipsMatchingName.map(name => getBaseId(Number(nameToId[name]))).filter(onlyUnique);
     if (ships.length == 1 && ships[0] == "") shipsToInclude = [];
-    const filteredFFArrays = filterList[mapname].filter(ffArray => ffArray.every(ffship => !shipsToInclude.includes(ffship)));
+
+    const select = document.getElementById("map");
+    const mtitle = select.options[select.selectedIndex].value;
+    const mapdata = raw[mtitle]
+
+    // FF that do not have target ship
+    const filteredFFArrays = mapdata.ff.filter(ffArray => ffArray.every(ffship => !shipsToInclude.includes(getBaseId(ffship))));
+    // For fair comparison, player fleet should not block any other FF
     const shipsToFilter = [].concat.apply([], filteredFFArrays).filter(onlyUnique);
+
     const data = {};
-    let total = 0;
-    for (let i = 0; i < map.length; i++) {
-        const entry = map[i];
-        if ((shipsToInclude.length == 0 || shipsToInclude.every(shipid => entry.player.includes(shipid))) && !entry.player.some(shipid => shipsToFilter.includes(shipid))
-    ) {
-            const ff = JSON.stringify(entry.ff);
-            if (!data[ff]) data[ff] = 0;
-            data[ff]++;
+    filteredFFArrays.forEach(array => data[JSON.stringify(array)] = 0);
+    let total = 0
+    mapdata.instances.forEach((array) => {
+        const player = array[0];
+        if (shipsToInclude.every(shipid => player.includes(shipid)) && !player.some(ship => shipsToFilter.includes(ship))) {
             total++;
+            data[JSON.stringify(array[1])] += 1;
         }
-    }
+    });
 
     var table = document.getElementById("table");
     while (table.rows.length > 1) {
@@ -81,7 +106,7 @@ function update() {
     for (let ff in data) {
         array.push({
             ff: pad_array(JSON.parse(ff), 6, -1),
-            count: data[ff]
+            count: data[ff] || 0
         })
     }
     array.sort(sortArray);
@@ -100,6 +125,16 @@ function update() {
             cell.appendChild(img);
         }
         var cell = row.insertCell(6)
-        cell.innerHTML = `${entry.count}/${total}, ${Math.floor(entry.count / total * 1000) / 10}%`;
+        cell.innerHTML = `${entry.count}/${total}, ${Math.floor(entry.count / total * 1000) / 10 || 0}%`;
     }
-};
+}
+
+function onReady() {
+    if (tlLoaded && Object.keys(raw).every(mtitle => raw[mtitle] !== null)) {
+        $("ships").show();
+        update();
+    } else {
+        $("ships").hide();
+        setTimeout(onReady, 1000);
+    }
+}

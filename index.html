@@ -1,6 +1,9 @@
 <head>
     <title>Friend Fleet List</title>
-    <script src="id_tl.js"></script>
+    <script
+        src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+        crossorigin="anonymous"></script>
     <script src="kcSHIPDATA.js"></script>
     <script src="fall20/E1J_strong.js"></script>
     <script src="fall20/E2Q_strong.js"></script>
@@ -31,11 +34,11 @@
     <br>
     <label for="map">Map:</label>
     <select id="map" name="map" onchange="update()">
-        <option value="E1J">E1J</option>
-        <option value="E2Q">E2Q</option>
-        <option value="E3Z">E3Z</option>
-        <option value="E4W">E4W</option>
-        <option value="E4Z" selected>E4Z</option>
+        <option value="E1Q">E1Q</option>
+        <option value="E1V">E1V</option>
+        <option value="E4Z">E4Z</option>
+        <option value="E5V">E5V</option>
+        <option value="E5Z" selected>E5Z</option>
     </select>
     <br>
     <br>
@@ -60,5 +63,5 @@
             <th>Appearance Rate</th>
         </tr>
     <script>
-    update()</script>
+    onReady()</script>
 </body>
