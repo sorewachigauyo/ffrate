@@ -33,21 +33,15 @@
     <label for="jp">日本</label>
     <br>
     <label for="map">Map:</label>
-    <select id="map" name="map" onchange="update()">
+    <select id="map" name="map" onchange="changeMap()">
         <option value="E1Q">E1Q</option>
         <option value="E1V">E1V</option>
         <option value="E4Z">E4Z</option>
         <option value="E5V">E5V</option>
         <option value="E5Z" selected>E5Z</option>
     </select>
-
-    <h3>How this tool works</h3>
-    We filter out fleets containing all of the ships you listed below (and do not block other friendly fleets).<br>Then, we show the probability of encountering an eligible friendly fleet.
-    <br>
     <br>
     Ships in Fleet / 艦隊に存在:
-    <br>
-    <textarea id="ships" onchange="update()">Yukikaze</textarea>
     <br>
     <br>
     Friend Fleets
@@ -61,6 +55,23 @@
             <th>Fifth Ship</th>
             <th>Sixth Ship</th>
             <th>Appearance Rate</th>
+            <th>Remove</th>
+        </tr>
+
+
+    
+    <table style="width:60%" id="table2">
+    <br>
+    <br>
+    Fleets to ignore
+        <tr>
+            <th>First Ship</th>
+            <th>Second Ship</th>
+            <th>Third Ship</th>
+            <th>Fourth Ship</th>
+            <th>Fifth Ship</th>
+            <th>Sixth Ship</th>
+            <th>Add</th>
         </tr>
     <script>
     onReady()</script>
